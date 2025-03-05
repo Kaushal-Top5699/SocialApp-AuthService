@@ -51,13 +51,21 @@ public class UserController {
     }
 
     @GetMapping("/other-user-info")
-    public ResponseEntity<HashMap<String, String>> fetchOtherUserInfo(@RequestHeader("Authorization") String authHeader,
-                                                                      @RequestBody String email, @RequestHeader String userID) {
+    public ResponseEntity<HashMap<String, String>> fetchOtherUserInfo(
+            @RequestHeader("Authorization") String authHeader,
+            @RequestHeader String userID,
+            @RequestParam String email) { // ✅ Change @RequestBody to @RequestParam
+
+        System.out.println(authHeader);
+        System.out.println(userID);
+        System.out.println(email);
+
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         String token = authHeader.replace("Bearer ", "").trim();
         HashMap<String, String> user = userService.fetchUserInfoById(token, email, userID);
+
         if (user != null) {
             return new ResponseEntity<>(user, HttpStatus.OK);
         }

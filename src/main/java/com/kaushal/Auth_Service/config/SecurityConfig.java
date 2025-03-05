@@ -30,8 +30,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/user/signup",
                                 "/user/login",
-                                "user/userInfo",
-                                "user/other-user-info").permitAll()
+                                "/user/user-info",
+                                "/user/other-user-info").permitAll()
+//                        .requestMatchers("/gateway/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(login -> login.disable())
