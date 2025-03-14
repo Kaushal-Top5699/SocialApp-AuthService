@@ -27,7 +27,7 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<User> signup(@RequestBody User newUser) {
+    public ResponseEntity<String> signup(@RequestBody User newUser) {
         return new ResponseEntity<>(userService.createUser(newUser), HttpStatus.CREATED);
     }
 
@@ -54,7 +54,7 @@ public class UserController {
     public ResponseEntity<HashMap<String, String>> fetchOtherUserInfo(
             @RequestHeader("Authorization") String authHeader,
             @RequestHeader String userID,
-            @RequestParam String email) { // ✅ Change @RequestBody to @RequestParam
+            @RequestParam String email) {
 
         System.out.println(authHeader);
         System.out.println(userID);
@@ -70,5 +70,15 @@ public class UserController {
             return new ResponseEntity<>(user, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/check-token-validity")
+    public ResponseEntity<Boolean> checkTokenValidity(@RequestHeader("Authorization") String authHeader, @RequestParam String email) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        String token = authHeader.replace("Bearer ", "").trim();
+        boolean validity = userService.isTokenValid(token, email);
+        return validity ? new ResponseEntity<>(true, HttpStatus.OK) : new ResponseEntity<>(false, HttpStatus.FORBIDDEN);
     }
 }

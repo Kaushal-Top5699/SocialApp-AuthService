@@ -38,14 +38,15 @@ public class UserService implements UserDetailsService {
     }
 
     // Create a new user and save to database.
-    public User createUser(User newUser) {
+    public String createUser(User newUser) {
         if (userRepository.findByEmail(newUser.getEmail()).isPresent()) {
-            throw new RuntimeException("User with this email already exists try logging in.");
+            return "User with this email already exists try logging in.";
         }
         // Password hashing.
         newUser.setPassword(passwordService.hashPassword(newUser.getPassword()));
         // Save the user to db and return the user.
-        return userRepository.save(newUser);
+        userRepository.save(newUser);
+        return "User Created!";
     }
 
     // User login.
@@ -102,6 +103,11 @@ public class UserService implements UserDetailsService {
             return userInfo;
         }
         return null;
+    }
+
+    // Token Validity
+    public Boolean isTokenValid(String token, String email) {
+        return jwtService.isTokenValid(token, email) && !jwtService.isTokenExpired(token);
     }
 
     @Override

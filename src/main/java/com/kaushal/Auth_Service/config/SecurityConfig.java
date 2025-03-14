@@ -31,7 +31,8 @@ public class SecurityConfig {
                         .requestMatchers("/user/signup",
                                 "/user/login",
                                 "/user/user-info",
-                                "/user/other-user-info").permitAll()
+                                "/user/other-user-info",
+                                "/user/check-token-validity").permitAll()
 //                        .requestMatchers("/gateway/**").permitAll()
                         .anyRequest().authenticated()
                 )
