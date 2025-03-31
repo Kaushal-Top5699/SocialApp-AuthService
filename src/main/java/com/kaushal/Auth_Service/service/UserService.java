@@ -83,6 +83,7 @@ public class UserService implements UserDetailsService {
     }
 
     // Other user's profile info.
+    // Other user's profile info.
     public HashMap<String, String> fetchUserInfoById(String token, String email, String userID) {
         if (jwtService.isTokenExpired(token) && !jwtService.isTokenValid(token, email)) {
             return null;
@@ -105,6 +106,7 @@ public class UserService implements UserDetailsService {
         return null;
     }
 
+    // Token Validity
     // Token Validity
     public Boolean isTokenValid(String token, String email) {
         return jwtService.isTokenValid(token, email) && !jwtService.isTokenExpired(token);
